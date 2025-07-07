@@ -3,7 +3,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from './screens/HomeScreen';
 import OrdersScreen from './screens/OrdersScreen';
-import ContactScreen from './screens/ContactScreen';
+import EmergencyScreen from './screens/EmergencyScreen';
+import BlogsScreen from './screens/BlogsScreen';
 import CartScreen from './screens/CartScreen';
 import { CartProvider } from './contexts/CartContext';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -21,7 +22,8 @@ function MainTabs() {
           let iconName;
           if (route.name === 'Home') iconName = 'home-outline';
           else if (route.name === 'Orders') iconName = 'receipt-outline';
-          else if (route.name === 'Contact') iconName = 'call-outline';
+          else if (route.name === 'Emergency') iconName = 'warning-outline';
+          else if (route.name === 'Blogs') iconName = 'newspaper-outline';
           return <Icon name={iconName} size={size} color={color} />;
         },
         tabBarActiveTintColor: '#3b82f6',
@@ -30,7 +32,8 @@ function MainTabs() {
     >
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Orders" component={OrdersScreen} />
-      <Tab.Screen name="Contact" component={ContactScreen} />
+      <Tab.Screen name="Blogs" component={BlogsScreen} />
+      <Tab.Screen name="Emergency" component={EmergencyScreen} />
     </Tab.Navigator>
   );
 }

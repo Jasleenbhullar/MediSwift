@@ -7,6 +7,8 @@ import {
   StyleSheet,
   TextInput,
   Alert,
+  Modal,
+  Animated,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useCart } from '../contexts/CartContext';
@@ -16,6 +18,8 @@ const CartScreen = () => {
   const { cartItems, updateQuantity, removeItem, placeOrder } = useCart();
   const [promoCode, setPromoCode] = useState('');
   const [address, setAddress] = useState('');
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [fadeAnim] = useState(new Animated.Value(0));
   const navigation = useNavigation();
 
   const TAX_RATE = 0.05;
@@ -45,11 +49,27 @@ const CartScreen = () => {
     };
 
     placeOrder(newOrder);
-    Alert.alert(
-      'Order Placed!',
-      `Paid ₹${total.toFixed(2)}\nYour medicines will be delivered to:\n${address}`,
-      [{ text: 'OK', onPress: () => navigation.navigate('Orders') }]
-    );
+    showPaymentSuccess();
+  };
+
+  const showPaymentSuccess = () => {
+    setShowSuccessPopup(true);
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const hidePaymentSuccess = () => {
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 300,
+      useNativeDriver: true,
+    }).start(() => {
+      setShowSuccessPopup(false);
+      navigation.navigate('MainTabs', { screen: 'Orders' });
+    });
   };
 
   return (
@@ -108,6 +128,30 @@ const CartScreen = () => {
       <TouchableOpacity style={styles.payBtn} onPress={handlePayNow}>
         <Text style={styles.payText}>Pay Now</Text>
       </TouchableOpacity>
+
+      {/* Payment Success Popup */}
+      <Modal
+        visible={showSuccessPopup}
+        transparent={true}
+        animationType="none"
+      >
+        <Animated.View style={[styles.modalOverlay, { opacity: fadeAnim }]}>
+          <View style={styles.successPopup}>
+            <View style={styles.successIconContainer}>
+              <Icon name="checkmark-circle" size={60} color="#22c55e" />
+            </View>
+            <Text style={styles.successTitle}>Payment Successful!</Text>
+            <Text style={styles.successAmount}>₹{total.toFixed(2)}</Text>
+            <Text style={styles.successMessage}>
+              Your order has been placed successfully. You can track your order in order section.
+            </Text>
+            <Text style={styles.successAddress}>{address}</Text>
+            <TouchableOpacity style={styles.successButton} onPress={hidePaymentSuccess}>
+              <Text style={styles.successButtonText}>Continue</Text>
+            </TouchableOpacity>
+          </View>
+        </Animated.View>
+      </Modal>
     </View>
   );
 };
@@ -161,4 +205,64 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   payText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  successPopup: {
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    padding: 30,
+    margin: 20,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.25,
+    shadowRadius: 20,
+    elevation: 10,
+  },
+  successIconContainer: {
+    marginBottom: 20,
+  },
+  successTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#1e293b',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  successAmount: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#22c55e',
+    marginBottom: 20,
+  },
+  successMessage: {
+    fontSize: 16,
+    color: '#64748b',
+    textAlign: 'center',
+    marginBottom: 10,
+    lineHeight: 22,
+  },
+  successAddress: {
+    fontSize: 14,
+    color: '#475569',
+    textAlign: 'center',
+    marginBottom: 25,
+    fontStyle: 'italic',
+    paddingHorizontal: 10,
+  },
+  successButton: {
+    backgroundColor: '#22c55e',
+    paddingHorizontal: 30,
+    paddingVertical: 12,
+    borderRadius: 25,
+  },
+  successButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
 });

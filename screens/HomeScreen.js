@@ -145,22 +145,7 @@ const HomeScreen = () => {
           ))}
         </View>
 
-        {/* Blog Section */}
-        <Text style={styles.blogTitle}>Health & Wellness Blogs</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.blogScroll} contentContainerStyle={{ paddingHorizontal: 16 }}>
-          <View style={styles.blogCard}>
-            <Text style={styles.blogHeading}>5 Tips for Staying Healthy During Monsoon</Text>
-            <Text style={styles.blogSnippet}>Boost immunity and avoid seasonal illness.</Text>
-          </View>
-          <View style={styles.blogCard}>
-            <Text style={styles.blogHeading}>Understanding Diabetes & Medication</Text>
-            <Text style={styles.blogSnippet}>A guide to insulin and diet precautions.</Text>
-          </View>
-          <View style={styles.blogCard}>
-            <Text style={styles.blogHeading}>When to Take Vitamin Supplements?</Text>
-            <Text style={styles.blogSnippet}>Learn about timing, types, and signs of deficiency.</Text>
-          </View>
-        </ScrollView>
+
       </ScrollView>
     </View>
   );
@@ -244,35 +229,4 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   addBtnText: { color: '#fff', fontWeight: '700' },
-  blogTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    marginHorizontal: 16,
-    marginTop: 20,
-    marginBottom: 12,
-    color: '#111',
-  },
-  blogScroll: { paddingBottom: 20 },
-  blogCard: {
-    width: 240,
-    backgroundColor: '#f0f9ff',
-    borderRadius: 12,
-    padding: 16,
-    marginRight: 12,
-    shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  blogHeading: {
-    fontSize: 16,
-    fontWeight: '700',
-    marginBottom: 6,
-    color: '#1e3a8a',
-  },
-  blogSnippet: {
-    fontSize: 14,
-    color: '#333',
-    lineHeight: 20,
-  },
 });
